@@ -80,6 +80,11 @@ def main(loaded_game = False):
 				if 50 < event.key and 56 > event.key:
 					field_size = event.key - 48
 					reset()
+
+				if event.key == pygame.K_F1:
+					save_game()
+				elif event.key == pygame.K_l:
+					load_game()
 				elif event.key == pygame.K_u:
 					to_previous_move()
 
@@ -126,8 +131,8 @@ def set_game_over_labels():
 	surface.fill((242, 232, 201))
 
 	label = score_font.render("Game Over!", 1, (0, 0, 0))
-	label2 = score_font.render("You score is" + str(total_points), 1, (0, 0, 0))
-	label3 = common_font.render("Press "R" to restart.", 1, (0, 0, 0))
+	label2 = score_font.render("Your score is" + str(total_points), 1, (0, 0, 0))
+	label3 = common_font.render("Press "R" to restart!", 1, (0, 0, 0))
 
 	surface.blit(label, (50, 100))
 	surface.blit(label2, (50, 200))
@@ -208,6 +213,35 @@ def can_move():
 
 	return False
 
+
+def save_game():
+	f = open("savedata", "w")
+
+	line1 = " ".join([str(matrix[make_round(_ / field_size)][_ % field_size]) for _ in range(0, field_size ** 2)])
+
+	f.write(line1 + "\n")
+	f.write(str(field_size)  + "\n")
+	f.write(str(total_points))
+	f.close()
+
+
+def load_game():
+	global field_size
+	global total_points
+	global matrix
+
+	f = open("savedata", "r")
+
+	mat = (f.readline()).split(' ', field_size ** 2)
+	field_size = int(f.readline())
+	total_points = int(f.readline())
+
+	for i in range(0, field_size ** 2):
+		matrix[make_round(i / field_size)][i % field_size] = int(mat[i])
+
+	f.close()
+
+	main(True)
 
 
 def rotate_to_clockwise():
