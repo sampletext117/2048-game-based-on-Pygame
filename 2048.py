@@ -15,28 +15,114 @@ colour_dict = { 0: (242, 232, 201), 2: (242, 205, 184),
 
 total_points = 0
 default_score = 2
-field_size = 5
+
 
 pygame.init()
-width, height = 400, 500
+width, height = 600, 700
 surface = pygame.display.set_mode((width, height), 0, 32)
 pygame.display.set_caption("2048")
 
-common_font = pygame.font.SysFont("calibri", 22)
-score_font = pygame.font.SysFont("calibri", 50)
+common_font = pygame.font.SysFont("calibri", 26)
+score_font = pygame.font.SysFont("calibri", 52)
+big_font = pygame.font.SysFont("calibri", 86)
+medium_font = pygame.font.SysFont("calibri", 40)
 
 
 matrix = []
 
-for i in range(field_size):
-	matrix.append([])
-	for j in range(field_size):
-		matrix[i].append(0)
+# for i in range(field_size):
+# 	matrix.append([])
+# 	for j in range(field_size):
+# 		matrix[i].append(0)
 
 
 previous_matrix = []
 
-def main(loaded_game = False):
+
+def start_screen(loaded_game = False):
+
+	surface.fill((242, 232, 201))
+
+	pygame.draw.rect(surface, (255, 136, 0), (20, 500, 100, 100))
+	pygame.draw.rect(surface, (255, 136, 0), (170, 500, 100, 100))
+	pygame.draw.rect(surface, (255, 136, 0), (320, 500, 100, 100))
+	pygame.draw.rect(surface, (255, 136, 0), (470, 500, 100, 100))
+
+	labell = common_font.render("4X4", 1, (0, 0, 0))
+	label2 = common_font.render("5X5", 1, (0, 0, 0))
+	label3 = common_font.render("6X6", 1, (0, 0, 0))
+	label4 = common_font.render("8X8", 1, (0, 0, 0))
+	label_name = big_font.render("2048", 1, (0, 0, 0))
+	label_6 = medium_font.render("Select your board size:", 1, (0, 0, 0))
+
+
+	surface.blit(labell, (50, 535))
+	surface.blit(label2, (200, 535))
+	surface.blit(label3, (350, 535))
+	surface.blit(label4, (500, 535))
+	surface.blit(label_name, (210, 100))
+	surface.blit(label_6, (120, 400))
+
+	while True:
+		for event in pygame.event.get():
+			if event.type == QUIT:
+				pygame.quit()
+				sys.exit()
+			if not loaded_game:
+
+				if event.type == MOUSEBUTTONDOWN and event.button == 1 and click_on_rect(event.pos,
+																							(20, 110), (500, 600)):
+					main(4)
+
+				if event.type == MOUSEBUTTONDOWN and event.button == 1 and click_on_rect(event.pos,
+																					 (170, 260), (500, 600)):
+					main(5)
+
+				if event.type == MOUSEBUTTONDOWN and event.button == 1 and click_on_rect(event.pos,
+																					 (320, 410), (500, 600)):
+					main(6)
+
+				if event.type == MOUSEBUTTONDOWN and event.button == 1 and click_on_rect(event.pos,
+																						 (470, 560), (500, 600)):
+					main(8)
+
+			else:
+
+				if event.type == MOUSEBUTTONDOWN and event.button == 1 and click_on_rect(event.pos,
+																						 (20, 110), (500, 600)):
+					main(4, True)
+
+				if event.type == MOUSEBUTTONDOWN and event.button == 1 and click_on_rect(event.pos,
+																						 (170, 260), (500, 600)):
+					main(5, True)
+
+				if event.type == MOUSEBUTTONDOWN and event.button == 1 and click_on_rect(event.pos,
+																						 (320, 410), (500, 600)):
+					main(6, True)
+
+				if event.type == MOUSEBUTTONDOWN and event.button == 1 and click_on_rect(event.pos,
+																						 (470, 560), (500, 600)):
+					main(8, True)
+
+		pygame.display.update()
+
+
+
+
+def click_on_rect(pos, rect_dx, rect_dy):
+	if ((pos[0] - rect_dx[0]) * (pos[0] - rect_dx[1])) <= 0 and ((pos[1]
+							- rect_dy[0])* (pos[1] - rect_dy[1])) <= 0:
+		return True
+	else:
+		return False
+
+def main(n, loaded_game = False):
+	global field_size
+	field_size = int(n)
+	for i in range(field_size):
+		matrix.append([])
+		for j in range(field_size):
+			matrix[i].append(0)
 
 	if not loaded_game:
 		set_initial_tile()
@@ -97,7 +183,9 @@ def set_matrix():
 
 	for i in range(0, field_size):
 		for j in range(0, field_size):
-			pygame.draw.rect(surface, colour_dict[matrix[i][j]], (i*(width/field_size), j*(width/field_size) + 100, (width/field_size) - 5, (width/field_size) - 5))
+			pygame.draw.rect(surface, colour_dict[matrix[i][j]],
+							 (i*(width/field_size), j*(width/field_size) + 100,
+							  (width/field_size) - 5, (width/field_size) - 5))
 
 
 			if matrix[i][j] == 0:
@@ -109,19 +197,23 @@ def set_matrix():
 
 			if matrix[i][j] < 9:
 				surface.blit(label, ((i * (width / field_size) + ((width / field_size) / 2.5)),
-									 ((j * ((height - 100) / field_size)) + ((((height - 100) / field_size)) / 3.2) + 100)))
+									 ((j * ((height - 100) / field_size)) +
+									  ((((height - 100) / field_size)) / 3.2) + 100)))
 				# surface.blit(label, (i * (width / field_size) + 30, j * (400 / field_size) + 130))
 			elif matrix[i][j] > 9 and matrix[i][j] < 65:
 				surface.blit(label,((i * (width / field_size) + ((width / field_size) / 3)),
-									((j * ((height - 100) / field_size)) + ((((height - 100) / field_size)) / 3.2) + 100)))
+									((j * ((height - 100) / field_size)) +
+									 ((((height - 100) / field_size)) / 3.2) + 100)))
 				# surface.blit(label, (i * (width / field_size) + 25, j * (400 / field_size) + 130))
 			elif matrix[i][j] > 65 and matrix[i][j] < 512:
 				surface.blit(label, ((i * (width / field_size) + ((width / field_size) / 6)),
-									 ((j * ((height - 100) / field_size)) + ((((height - 100) / field_size)) / 3.2) + 100)))
+									 ((j * ((height - 100) / field_size)) +
+									  ((((height - 100) / field_size)) / 3.2) + 100)))
 				# surface.blit(label, (i * (width / field_size) + 15, j * (400 / field_size) + 130))
 			else:
 				surface.blit(label, ((i * (width / field_size) + ((width / field_size) / 10)),
-									 ((j * ((height - 100) / field_size)) + ((((height - 100) / field_size)) / 3.2) + 100)))
+									 ((j * ((height - 100) / field_size)) +
+									  ((((height - 100) / field_size)) / 3.2) + 100)))
 				# surface.blit(label, (i * (width / field_size) + 10, j * (400 / field_size) + 130))
 			surface.blit(label2, (10, 20))
 
@@ -131,7 +223,7 @@ def set_game_over_labels():
 	surface.fill((242, 232, 201))
 
 	label = score_font.render("Game Over!", 1, (0, 0, 0))
-	label2 = score_font.render("Your score is" + str(total_points), 1, (0, 0, 0))
+	label2 = score_font.render("Your score is " + str(total_points), 1, (0, 0, 0))
 	label3 = common_font.render("Press "R" to restart!", 1, (0, 0, 0))
 
 	surface.blit(label, (50, 100))
@@ -199,7 +291,7 @@ def reset():
 	surface.fill((242, 232, 201))
 
 	matrix = [[0 for i in range(0, field_size)] for j in range(0, field_size)]
-	main()
+	start_screen()
 
 
 def can_move():
@@ -217,7 +309,8 @@ def can_move():
 def save_game():
 	f = open("savedata", "w")
 
-	line1 = " ".join([str(matrix[make_round(_ / field_size)][_ % field_size]) for _ in range(0, field_size ** 2)])
+	line1 = " ".join([str(matrix[make_round(_ / field_size)][_ % field_size])
+					  for _ in range(0, field_size ** 2)])
 
 	f.write(line1 + "\n")
 	f.write(str(field_size)  + "\n")
@@ -241,21 +334,21 @@ def load_game():
 
 	f.close()
 
-	main(True)
+	start_screen(True)
 
 
 def rotate_to_clockwise():
 	for i in range(0, int(field_size/2)):
-		for k in range(i, field_size - i - 1):
-			temp1 = matrix[i][k]
-			temp2 = matrix[field_size - 1 - k][i]
-			temp3 = matrix[field_size - 1 - i][field_size - 1 - k]
-			temp4 = matrix[k][field_size - 1 - i]
+		for j in range(i, field_size - i - 1):
+			temp1 = matrix[i][j]
+			temp2 = matrix[field_size - 1 - j][i]
+			temp3 = matrix[field_size - 1 - i][field_size - 1 - j]
+			temp4 = matrix[j][field_size - 1 - i]
 
-			matrix[field_size - 1 - k][i] = temp1
-			matrix[field_size - 1 - i][field_size - 1 - k] = temp2
-			matrix[k][field_size - 1 - i] = temp3
-			matrix[i][k] = temp4
+			matrix[field_size - 1 - j][i] = temp1
+			matrix[field_size - 1 - i][field_size - 1 - j] = temp2
+			matrix[j][field_size - 1 - i] = temp3
+			matrix[i][j] = temp4
 
 
 def pressed_arrow_or_wasd(k):
@@ -274,7 +367,7 @@ def get_rotations(k):
 		return 3
 
 
-def convertToLinearMatrix():
+def previous_game_data():
 	mat = []
 
 	for i in range(0, field_size ** 2):
@@ -286,7 +379,7 @@ def convertToLinearMatrix():
 
 
 def add_to_moves():
-	previous_matrix.append(convertToLinearMatrix())
+	previous_matrix.append(previous_game_data())
 
 
 def to_previous_move():
@@ -301,4 +394,4 @@ def to_previous_move():
 
 		set_matrix()
 
-main()
+start_screen()
