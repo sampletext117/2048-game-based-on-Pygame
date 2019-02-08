@@ -4,6 +4,7 @@ from random import *
 
 
 
+includes = ["re"]
 colour_dict = { 0: (242, 232, 201), 2: (242, 205, 184),
 				4: (149, 123, 141), 8: (108, 146, 175),
 				16: (59, 131, 189) , 32: (28, 169, 201),
@@ -27,14 +28,7 @@ score_font = pygame.font.SysFont("calibri", 52)
 big_font = pygame.font.SysFont("calibri", 86)
 medium_font = pygame.font.SysFont("calibri", 40)
 
-
 matrix = []
-
-# for i in range(field_size):
-# 	matrix.append([])
-# 	for j in range(field_size):
-# 		matrix[i].append(0)
-
 
 previous_matrix = []
 
@@ -43,24 +37,28 @@ def start_screen(loaded_game = False):
 
 	surface.fill((242, 232, 201))
 
-	pygame.draw.rect(surface, (255, 136, 0), (20, 500, 100, 100))
-	pygame.draw.rect(surface, (255, 136, 0), (170, 500, 100, 100))
-	pygame.draw.rect(surface, (255, 136, 0), (320, 500, 100, 100))
-	pygame.draw.rect(surface, (255, 136, 0), (470, 500, 100, 100))
+	pygame.draw.rect(surface, (255, 136, 0), (25, 500, 100, 100))
+	pygame.draw.rect(surface, (255, 136, 0), (175, 500, 100, 100))
+	pygame.draw.rect(surface, (255, 136, 0), (325, 500, 100, 100))
+	pygame.draw.rect(surface, (255, 136, 0), (475, 500, 100, 100))
 
 	labell = common_font.render("4X4", 1, (0, 0, 0))
 	label2 = common_font.render("5X5", 1, (0, 0, 0))
 	label3 = common_font.render("6X6", 1, (0, 0, 0))
 	label4 = common_font.render("8X8", 1, (0, 0, 0))
-	label_name = big_font.render("2048", 1, (0, 0, 0))
+	label_welcome = medium_font.render("Welcome to", 1, (0, 0, 0))
+	label_name = big_font.render("'2048'", 1, (0, 0, 0))
+	label_game = medium_font.render("game", 1, (0, 0, 0))
 	label_6 = medium_font.render("Select your board size:", 1, (0, 0, 0))
 
 
-	surface.blit(labell, (50, 535))
-	surface.blit(label2, (200, 535))
-	surface.blit(label3, (350, 535))
-	surface.blit(label4, (500, 535))
-	surface.blit(label_name, (210, 100))
+	surface.blit(labell, (55, 535))
+	surface.blit(label2, (205, 535))
+	surface.blit(label3, (355, 535))
+	surface.blit(label4, (505, 535))
+	surface.blit(label_welcome, (216, 30))
+	surface.blit(label_name, (210, 70))
+	surface.blit(label_game, (265, 150))
 	surface.blit(label_6, (120, 400))
 
 	while True:
@@ -107,14 +105,13 @@ def start_screen(loaded_game = False):
 		pygame.display.update()
 
 
-
-
 def click_on_rect(pos, rect_dx, rect_dy):
 	if ((pos[0] - rect_dx[0]) * (pos[0] - rect_dx[1])) <= 0 and ((pos[1]
 							- rect_dy[0])* (pos[1] - rect_dy[1])) <= 0:
 		return True
 	else:
 		return False
+
 
 def main(n, loaded_game = False):
 	global field_size
