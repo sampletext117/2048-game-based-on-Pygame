@@ -3,8 +3,6 @@ from pygame.locals import *
 from random import *
 
 
-
-includes = ["re"]
 colour_dict = { 0: (242, 232, 201), 2: (242, 205, 184),
 				4: (149, 123, 141), 8: (108, 146, 175),
 				16: (59, 131, 189) , 32: (28, 169, 201),
@@ -194,23 +192,23 @@ def set_matrix():
 
 			if matrix[i][j] < 9:
 				surface.blit(label, ((i * (width / field_size) + ((width / field_size) / 2.5)),
-									 ((j * ((height - 100) / field_size)) +
-									  ((((height - 100) / field_size)) / 3.2) + 100)))
+							((j * ((height - 100) / field_size)) +
+							((((height - 100) / field_size)) / 3.2) + 100)))
 				# surface.blit(label, (i * (width / field_size) + 30, j * (400 / field_size) + 130))
 			elif matrix[i][j] > 9 and matrix[i][j] < 65:
 				surface.blit(label,((i * (width / field_size) + ((width / field_size) / 3)),
-									((j * ((height - 100) / field_size)) +
-									 ((((height - 100) / field_size)) / 3.2) + 100)))
+							((j * ((height - 100) / field_size)) +
+							((((height - 100) / field_size)) / 3.2) + 100)))
 				# surface.blit(label, (i * (width / field_size) + 25, j * (400 / field_size) + 130))
-			elif matrix[i][j] > 65 and matrix[i][j] < 512:
+			elif matrix[i][j] > 65 and matrix[i][j] < 513:
 				surface.blit(label, ((i * (width / field_size) + ((width / field_size) / 6)),
-									 ((j * ((height - 100) / field_size)) +
-									  ((((height - 100) / field_size)) / 3.2) + 100)))
+							((j * ((height - 100) / field_size)) +
+							((((height - 100) / field_size)) / 3.2) + 100)))
 				# surface.blit(label, (i * (width / field_size) + 15, j * (400 / field_size) + 130))
 			else:
 				surface.blit(label, ((i * (width / field_size) + ((width / field_size) / 10)),
-									 ((j * ((height - 100) / field_size)) +
-									  ((((height - 100) / field_size)) / 3.2) + 100)))
+							((j * ((height - 100) / field_size)) +
+							((((height - 100) / field_size)) / 3.2) + 100)))
 				# surface.blit(label, (i * (width / field_size) + 10, j * (400 / field_size) + 130))
 			surface.blit(label2, (10, 20))
 
@@ -304,7 +302,8 @@ def can_move():
 
 
 def save_game():
-	f = open("savedata", "w")
+	name_with_field_size = "savedata" + str(field_size) + 'X' + str(field_size)
+	f = open(name_with_field_size, "w")
 
 	line1 = " ".join([str(matrix[make_round(_ / field_size)][_ % field_size])
 					  for _ in range(0, field_size ** 2)])
@@ -320,18 +319,23 @@ def load_game():
 	global total_points
 	global matrix
 
-	f = open("savedata", "r")
+	name_with_field_size = "savedata" + str(field_size) + 'X' + str(field_size)
+	try:
+		f = open(name_with_field_size, "r")
 
-	mat = (f.readline()).split(' ', field_size ** 2)
-	field_size = int(f.readline())
-	total_points = int(f.readline())
+		mat = (f.readline()).split(' ', field_size ** 2)
+		field_size = int(f.readline())
+		total_points = int(f.readline())
 
-	for i in range(0, field_size ** 2):
-		matrix[make_round(i / field_size)][i % field_size] = int(mat[i])
+		for i in range(0, field_size ** 2):
+			matrix[make_round(i / field_size)][i % field_size] = int(mat[i])
 
-	f.close()
+		f.close()
 
-	start_screen(True)
+		start_screen(True)
+
+	except:
+		pass
 
 
 def rotate_to_clockwise():
