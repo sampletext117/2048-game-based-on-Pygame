@@ -1,7 +1,43 @@
 import pygame, sys, time
 from pygame.locals import *
 from random import *
+import os
 
+
+# class AnimatedSprite(pygame.sprite.Sprite):
+# 	def __init__(self, group, sheet, columns, rows, x, y):
+# 		super().__init__(group)
+# 		self.frames = []
+# 		self.cut_sheet(sheet, columns, rows)
+# 		self.cur_frame = 0
+# 		self.image = self.frames[self.cur_frame]
+# 		self.rect = self.rect.move(x, y)
+#
+# 	def cut_sheet(self, sheet, columns, rows):
+# 		self.rect = pygame.Rect(0, 0, sheet.get_width() // columns,
+# 								sheet.get_height() // rows)
+# 		for j in range(rows):
+# 			for i in range(columns):
+# 				frame_location = (self.rect.w * i, self.rect.h * j)
+# 				self.frames.append(sheet.subsurface(pygame.Rect(
+# 					frame_location, self.rect.size)))
+#
+# 	def update(self):
+# 		self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+# 		self.image = self.frames[self.cur_frame]
+#
+# def load_image(name, colorkey=None):
+#     fullname = os.path.join(name)
+#     try:
+#         image = pygame.image.load(fullname)
+#     except pygame.error as message:
+#         print('Cannot load image:', name)
+#         raise SystemExit(message)
+
+pygame.mixer.init()
+music = pygame.mixer.Sound("Winds of Stories.wav")
+pygame.mixer.Sound.set_volume(music, 0.3)
+pygame.mixer.Sound.play(music, -1)
 
 colour_dict = { 0: (242, 232, 201), 2: (242, 205, 184),
 				4: (149, 123, 141), 8: (108, 146, 175),
@@ -14,7 +50,6 @@ colour_dict = { 0: (242, 232, 201), 2: (242, 205, 184),
 
 total_points = 0
 default_score = 2
-
 
 pygame.init()
 width, height = 600, 700
@@ -29,7 +64,6 @@ medium_font = pygame.font.SysFont("calibri", 40)
 matrix = []
 
 previous_matrix = []
-
 
 def start_screen(loaded_game = False):
 
@@ -54,9 +88,9 @@ def start_screen(loaded_game = False):
 	surface.blit(label2, (205, 535))
 	surface.blit(label3, (355, 535))
 	surface.blit(label4, (505, 535))
-	surface.blit(label_welcome, (216, 30))
-	surface.blit(label_name, (210, 70))
-	surface.blit(label_game, (265, 150))
+	surface.blit(label_welcome, (210, 30))
+	surface.blit(label_name, (205, 70))
+	surface.blit(label_game, (270, 150))
 	surface.blit(label_6, (120, 400))
 
 	while True:
@@ -158,6 +192,9 @@ def main(n, loaded_game = False):
 				if event.key == pygame.K_r:
 					reset()
 
+				if event.key == pygame.K_F2:
+					pygame.mixer.pause()
+
 				if 50 < event.key and 56 > event.key:
 					field_size = event.key - 48
 					reset()
@@ -169,6 +206,9 @@ def main(n, loaded_game = False):
 				elif event.key == pygame.K_u:
 					to_previous_move()
 
+		# test = AnimatedSprite(all_sprites, load_image("coin.png"), 30, 1, 50, 50)
+		# all_sprites.draw()
+		# all_sprites.update(surface)
 		pygame.display.update()
 
 def set_matrix():
