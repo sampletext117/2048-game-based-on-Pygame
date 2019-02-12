@@ -124,26 +124,31 @@ def start_screen(loaded_game = False):
 
 			if not loaded_game:
 
-				if event.type == MOUSEBUTTONDOWN and event.button == 1 and click_on_rect(event.pos,
-																							(20, 110), (500, 600)):
+				if event.type == MOUSEBUTTONDOWN and\
+                    event.button == 1 and click_on_rect(event.pos,
+						(20, 110), (500, 600)):
 					main(4)
 
-				if event.type == MOUSEBUTTONDOWN and event.button == 1 and click_on_rect(event.pos,
-																					 (170, 260), (500, 600)):
+				if event.type == MOUSEBUTTONDOWN and\
+                        event.button == 1 and click_on_rect(event.pos,
+						(170, 260), (500, 600)):
 					main(5)
 
-				if event.type == MOUSEBUTTONDOWN and event.button == 1 and click_on_rect(event.pos,
-																					 (320, 410), (500, 600)):
+				if event.type == MOUSEBUTTONDOWN and\
+                        event.button == 1 and click_on_rect(event.pos,
+						(320, 410), (500, 600)):
 					main(6)
 
-				if event.type == MOUSEBUTTONDOWN and event.button == 1 and click_on_rect(event.pos,
-																						 (470, 560), (500, 600)):
+				if event.type == MOUSEBUTTONDOWN and\
+                        event.button == 1 and click_on_rect(event.pos,
+						(470, 560), (500, 600)):
 					main(8)
 
 			else:
 
-				if event.type == MOUSEBUTTONDOWN and event.button == 1 and click_on_rect(event.pos,
-																						 (20, 110), (500, 600)):
+				if event.type == MOUSEBUTTONDOWN and\
+                        event.button == 1 and click_on_rect(event.pos,
+				        (20, 110), (500, 600)):
 					main(4, True)
 
 				if event.type == MOUSEBUTTONDOWN and event.button == 1 and click_on_rect(event.pos,
@@ -245,170 +250,165 @@ def main(n, loaded_game = False):
 		pygame.display.update()
 
 def set_matrix():
+    surface.fill((242, 232, 201))
 
-	surface.fill((242, 232, 201))
+    for i in range(0, field_size):
+        for j in range(0, field_size):
+            pygame.draw.rect(surface, colour_dict[matrix[i][j]],
+                             (i*(width/field_size), j*(width/field_size) + 100,
+                             (width/field_size) - 5, (width/field_size) - 5))
+            if matrix[i][j] == 0:
+                label = common_font.render('', 1, (255,255,255))
+            else:
+                label = common_font.render(str(matrix[i][j]), 1, (255, 255, 255))
+            label2 = score_font.render("Score:" + str(total_points), 1, (0, 0, 0))
 
+            if matrix[i][j] < 9:
+                surface.blit(label, ((i * (width / field_size) + ((width / field_size) / 2.5)),
+						((j * ((height - 100) / field_size)) +
+						((((height - 100) / field_size)) / 3.2) + 100)))
 
-	for i in range(0, field_size):
-		for j in range(0, field_size):
-			pygame.draw.rect(surface, colour_dict[matrix[i][j]],
-							 (i*(width/field_size), j*(width/field_size) + 100,
-							  (width/field_size) - 5, (width/field_size) - 5))
-
-
-			if matrix[i][j] == 0:
-				label = common_font.render('', 1, (255,255,255))
-			else:
-				label = common_font.render(str(matrix[i][j]), 1, (255, 255, 255))
-
-			label2 = score_font.render("Score:" + str(total_points), 1, (0, 0, 0))
-
-			if matrix[i][j] < 9:
-				surface.blit(label, ((i * (width / field_size) + ((width / field_size) / 2.5)),
+            elif matrix[i][j] > 9 and matrix[i][j] < 65:
+                surface.blit(label,((i * (width / field_size) + ((width / field_size) / 3)),
 							((j * ((height - 100) / field_size)) +
 							((((height - 100) / field_size)) / 3.2) + 100)))
-				# surface.blit(label, (i * (width / field_size) + 30, j * (400 / field_size) + 130))
-			elif matrix[i][j] > 9 and matrix[i][j] < 65:
-				surface.blit(label,((i * (width / field_size) + ((width / field_size) / 3)),
+
+            elif matrix[i][j] > 65 and matrix[i][j] < 513:
+                surface.blit(label, ((i * (width / field_size) + ((width / field_size) / 6)),
 							((j * ((height - 100) / field_size)) +
 							((((height - 100) / field_size)) / 3.2) + 100)))
-				# surface.blit(label, (i * (width / field_size) + 25, j * (400 / field_size) + 130))
-			elif matrix[i][j] > 65 and matrix[i][j] < 513:
-				surface.blit(label, ((i * (width / field_size) + ((width / field_size) / 6)),
+
+            else:
+                surface.blit(label, ((i * (width / field_size) + ((width / field_size) / 10)),
 							((j * ((height - 100) / field_size)) +
 							((((height - 100) / field_size)) / 3.2) + 100)))
-				# surface.blit(label, (i * (width / field_size) + 15, j * (400 / field_size) + 130))
-			else:
-				surface.blit(label, ((i * (width / field_size) + ((width / field_size) / 10)),
-							((j * ((height - 100) / field_size)) +
-							((((height - 100) / field_size)) / 3.2) + 100)))
-				# surface.blit(label, (i * (width / field_size) + 10, j * (400 / field_size) + 130))
-			surface.blit(label2, (10, 20))
+
+            surface.blit(label2, (10, 20))
 
 def set_game_over_labels():
-	global total_points
+    global total_points
 
-	surface.fill((242, 232, 201))
+    surface.fill((242, 232, 201))
 
-	label = score_font.render("Game Over!", 1, (0, 0, 0))
-	label2 = score_font.render("Your score is " + str(total_points), 1, (0, 0, 0))
-	label3 = common_font.render("Press "R" to restart!", 1, (0, 0, 0))
+    label = score_font.render("Game Over!", 1, (0, 0, 0))
+    label2 = score_font.render("Your score is " + str(total_points), 1, (0, 0, 0))
+    label3 = common_font.render("Press "R" to restart!", 1, (0, 0, 0))
 
-	surface.blit(label, (50, 100))
-	surface.blit(label2, (50, 200))
-	surface.blit(label3, (50, 300))
+    surface.blit(label, (50, 100))
+    surface.blit(label2, (50, 200))
+    surface.blit(label3, (50, 300))
 
 def set_initial_tile():
-	count = 0
-	for i in range(0, field_size):
-		for j in range(0, field_size):
-			if matrix[i][j] == 0:
-				count += 1
+    count = 0
+    for i in range(0, field_size):
+        for j in range(0, field_size):
+            if matrix[i][j] == 0:
+                count += 1
 
-	k = make_round(random() * field_size * field_size)
+    k = make_round(random() * field_size * field_size)
 
-	while matrix[make_round(k / field_size)][k % field_size] != 0:
-		k = make_round(random() * field_size * field_size)
+    while matrix[make_round(k / field_size)][k % field_size] != 0:
+        k = make_round(random() * field_size * field_size)
 
-	matrix[make_round(k / field_size)][k % field_size] = 2
+    matrix[make_round(k / field_size)][k % field_size] = 2
 
 def make_round(n):
-	return int(n - (n % 1))
+    return int(n - (n % 1))
 
 def move_tiles():
-	for i in range(0, field_size):
-		for j in range(0, field_size - 1):
-			while matrix[i][j] == 0 and sum(matrix[i][j:]) > 0:
-				for k in range(j, field_size - 1):
-					matrix[i][k] = matrix[i][k + 1]
-				matrix[i][field_size - 1] = 0
+    for i in range(0, field_size):
+        for j in range(0, field_size - 1):
+            while matrix[i][j] == 0 and sum(matrix[i][j:]) > 0:
+                for k in range(j, field_size - 1):
+                    matrix[i][k] = matrix[i][k + 1]
+                matrix[i][field_size - 1] = 0
 
 def can_go():
-	for i in range(0, field_size ** 2):
-		if matrix[make_round(i / field_size)][i % field_size] == 0:
-			return True
+    for i in range(0, field_size ** 2):
+        if matrix[make_round(i / field_size)][i % field_size] == 0:
+            return True
 
-	for i in range(0, field_size):
-		for j in range(0, field_size - 1):
-			if matrix[i][j] == matrix[i][j + 1]:
-				return True
-			elif matrix[j][i] == matrix[j + 1][i]:
-				return True
+    for i in range(0, field_size):
+        for j in range(0, field_size - 1):
+            if matrix[i][j] == matrix[i][j + 1]:
+                return True
+            elif matrix[j][i] == matrix[j + 1][i]:
+                return True
 
-	return False
+    return False
 
 
 
 def merge_tiles():
-	global total_points
+    global total_points
 
-	for i in range(0, field_size):
-		for k in range(0, field_size - 1):
-				if matrix[i][k] == matrix[i][k + 1] and matrix[i][k] != 0:
-					matrix[i][k] = matrix[i][k] * 2
-					matrix[i][k + 1] = 0
-					total_points += matrix[i][k]
-					move_tiles()
+    for i in range(0, field_size):
+        for k in range(0, field_size - 1):
+                if matrix[i][k] == matrix[i][k + 1] and matrix[i][k] != 0:
+                    matrix[i][k] = matrix[i][k] * 2
+                    matrix[i][k + 1] = 0
+                    total_points += matrix[i][k]
+                    move_tiles()
 
 
 def reset():
-	global total_points
-	global matrix
+    global total_points
+    global matrix
 
-	total_points = 0
-	surface.fill((242, 232, 201))
+    total_points = 0
+    surface.fill((242, 232, 201))
 
-	matrix = [[0 for i in range(0, field_size)] for j in range(0, field_size)]
-	start_screen()
+    matrix = [[0 for i in range(0, field_size)] for j in range(0, field_size)]
+    start_screen()
 
 
 def can_move():
 
-	for i in range(0, field_size):
-		for j in range(1, field_size):
-			if matrix[i][j-1] == 0 and matrix[i][j] > 0:
-				return True
-			elif (matrix[i][j-1] == matrix[i][j]) and matrix[i][j-1] != 0:
-				return True
+    for i in range(0, field_size):
+        for j in range(1, field_size):
+            if matrix[i][j-1] == 0 and matrix[i][j] > 0:
+                return True
+            elif (matrix[i][j-1] == matrix[i][j]) and matrix[i][j-1] != 0:
+                return True
 
-	return False
+    return False
 
 
 def save_game():
-	name_with_field_size = "savedata" + str(field_size) + 'X' + str(field_size)
-	f = open(name_with_field_size, "w")
+    name_with_field_size = "savedata" + str(field_size) + 'X' + str(field_size)
+    f = open(name_with_field_size, "w")
 
-	line1 = " ".join([str(matrix[make_round(_ / field_size)][_ % field_size])
+    line1 = " ".join([str(matrix[make_round(_ / field_size)][_ % field_size])
 					  for _ in range(0, field_size ** 2)])
 
-	f.write(line1 + "\n")
-	f.write(str(field_size)  + "\n")
-	f.write(str(total_points))
-	f.close()
+    f.write(line1 + "\n")
+    f.write(str(field_size)  + "\n")
+    f.write(str(total_points))
+    f.close()
 
 
 def load_game():
-	global field_size
-	global total_points
-	global matrix
+    global field_size
+    global total_points
+    global matrix
 
-	name_with_field_size = "savedata" + str(field_size) + 'X' + str(field_size)
-	try:
-		f = open(name_with_field_size, "r")
+    name_with_field_size = "savedata" + str(field_size) + 'X' + str(field_size)
+    try:
+        f = open(name_with_field_size, "r")
 
-		mat = (f.readline()).split(' ', field_size ** 2)
-		field_size = int(f.readline())
-		total_points = int(f.readline())
+        mat = (f.readline()).split(' ', field_size ** 2)
+        field_size = int(f.readline())
+        total_points = int(f.readline())
 
-		for i in range(0, field_size ** 2):
-			matrix[make_round(i / field_size)][i % field_size] = int(mat[i])
+        for i in range(0, field_size ** 2):
+            matrix[make_round(i / field_size)][i % field_size] = int(mat[i])
 
-		f.close()
+        f.close()
 
-		start_screen(True)
+        start_screen(True)
 
-	except:
-		pass
+    except:
+        pass
 
 
 def rotate_to_clockwise():
