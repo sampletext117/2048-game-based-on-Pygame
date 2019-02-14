@@ -247,7 +247,10 @@ def main(n, loaded_game=False):
                 elif event.key == pygame.K_u:
                     to_previous_move()
 
-        if iteration % 50 == 0:
+        if iteration >= 1100:
+            iteration = 0
+
+        if iteration % 110 == 0:
             pygame.draw.rect(surface, background_color,
                              coin.rect, 0)
             all_sprites.draw(surface)
