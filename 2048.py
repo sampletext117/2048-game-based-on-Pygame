@@ -4,33 +4,7 @@ import time
 from pygame.locals import *
 from random import *
 import os
-
-
-class Coin(pygame.sprite.Sprite):
-    def __init__(self, group, image_num):
-        super().__init__(group)
-        self.number = image_num
-        self.image = load_image("star" + str(self.number) + ".png")
-        self.rect = self.image.get_rect()
-        self.rect.x = 300
-        self.rect.y = 10
-
-    def update(self):
-        if self.number < 6:
-            self.number += 1
-        if self.number >= 6:
-            self.number = 1
-        self.image = load_image("star" + str(self.number) + ".png")
-
-
-def load_image(name, colorkey=None):
-    fullname = os.path.join(name)
-    try:
-        image = pygame.image.load(fullname)
-        return image
-    except pygame.error as message:
-        print('Cannot load image:', name)
-        raise SystemExit(message)
+from animated_picture import Coin
 
 
 all_sprites = pygame.sprite.Group()
@@ -69,6 +43,8 @@ matrix = []
 previous_matrix = []
 
 iteration = 0
+
+reseted = False
 
 
 def start_screen(loaded_game=False):
@@ -183,6 +159,7 @@ def click_on_rect(pos, rect_dx, rect_dy):
 def main(n, loaded_game=False):
     global field_size
     global iteration
+    global reseted
     field_size = int(n)
     for i in range(field_size):
         matrix.append([])
@@ -195,11 +172,17 @@ def main(n, loaded_game=False):
 
     set_matrix()
 
+    coin = Coin(all_sprites, image_number)
+
     if loaded_game:
         pygame.draw.rect(surface, background_color,
                          coin.rect, 0)
 
-    coin = Coin(all_sprites, image_number)
+    if reseted:
+        pygame.draw.rect(surface, background_color,
+                         coin.rect, 0)
+        reseted = False
+
 
     while True:
         for event in pygame.event.get():
@@ -382,11 +365,13 @@ def merge_tiles():
 def reset():
     global total_points
     global matrix
+    global reseted
 
     total_points = 0
     surface.fill(background_color)
 
     matrix = [[0 for i in range(0, field_size)] for j in range(0, field_size)]
+    reseted  = True
     start_screen()
 
 
