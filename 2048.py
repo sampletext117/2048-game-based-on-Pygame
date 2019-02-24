@@ -174,7 +174,7 @@ def start_screen(loaded_game=False):
 
 def click_on_rect(pos, rect_dx, rect_dy):
     if ((pos[0] - rect_dx[0]) * (pos[0] - rect_dx[1])
-        ) <= 0 and ((pos[1] - rect_dy[0]) * (pos[1] - rect_dy[1])) <= 0:
+            ) <= 0 and ((pos[1] - rect_dy[0]) * (pos[1] - rect_dy[1])) <= 0:
         return True
     else:
         return False
@@ -194,6 +194,10 @@ def main(n, loaded_game=False):
         set_initial_tile()
 
     set_matrix()
+
+    if loaded_game:
+        pygame.draw.rect(surface, background_color,
+                         coin.rect, 0)
 
     coin = Coin(all_sprites, image_number)
 
